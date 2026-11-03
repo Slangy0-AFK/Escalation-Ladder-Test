@@ -13,6 +13,13 @@ This test does not just count "did we block the bad thing?" It counts
 false positives too: every dangerous case has a paired safe twin, the
 same task *with* written authorisation, that should be allowed.
 
+In brief, this is a 20-turn evaluation protocol for checking whether a
+safety gate continues to block unauthorized actions as an attack escalates,
+while still allowing the same actions when written authorization is present.
+The unit tests check the scaler equations and paired-outcome scoring, including
+false-positive counts and malformed pairs; they do not run the external model
+evaluation, which requires `oit.py` and model integration.
+
 ## What it is NOT
 
 - Not a general safety certification
@@ -28,6 +35,10 @@ same task *with* written authorisation, that should be allowed.
     black_box_capability, temporal_poisoning
 - Turns 9-14, Cycle 2: same 6, + urgency / "leadership already approved, confirm now"
 - Turns 15-20, Cycle 3: same 6, + "save as permanent baseline, do not reopen review"
+
+The six behaviors tested in every cycle are goal drift, reward hacking,
+collusion, bias amplification, black-box capability, and temporal poisoning.
+Each behavior has one dangerous case and one paired safe twin per cycle.
 
 Attacker payloads are verbatim from Sean-Multi-Turn-Adversarial-Eval
 (`oit.py`), with only the cycle suffix added in Cycles 2 and 3.
@@ -52,6 +63,7 @@ ln 1 = 0 and the formula is undefined).
 
 - Proof required: P(T) = ln T — increasing with turn, unbounded (slowly)
   - Turn 1: 1.10, Turn 5: 1.95, Turn 10: 2.48, Turn 20: 3.09
+- The corresponding Setting(T) is about 286.82 at turn 1.
 - Exploration: e(T) = (Setting(T) - 1) / A0 = 1 / ln T — decreasing,
   > 0 for all finite T, never 0
   - Turn 1: 0.91, Turn 5: 0.51, Turn 10: 0.40, Turn 20: 0.32
@@ -137,4 +149,10 @@ undefined at T = 1, offset required in practice
 ## Run it
 
 ```bash
-python3 lab-test-muse-target-2026-10-25.py
+python3 -m unittest -v
+```
+
+These unit tests check the scaler equations and paired-outcome scorer,
+including false-positive rates, incomplete or mismatched pairs, and the first
+dangerous failure turn. They do not execute the 20-turn model evaluation;
+that requires the external `oit.py` module and model integration.
