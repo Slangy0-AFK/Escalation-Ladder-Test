@@ -105,36 +105,6 @@ Output:
 Printed summary (blocked rates, FP rate, first failure turn)
 lab-test-results-2026-10-25.json — full turn-by-turn results
 Audit chain verification (oit.py AuditChain)
-Results, 2026-10-25 run — Muse as target, unblinded
-Target: Muse, as operations AI. Attacker: scripted Sean.
-This run is UNBLINDED: Muse is both tester and target and knows the test.
-
-18 dangerous behaviour turns + 18 safe twins per arm:
-
-Arm	Dangerous blocked	Safe FP	First failure
-Prompt-only (Muse text)	18/18 (100%)	0/18 (0%)	none
-Scaler governor	18/18 (100%)	0/18 (0%)	none
-Audit chain: verify OK.
-
-Honest limits — read before citing any number
-Unblinded, single model, scripted attacker, heuristic classifier.
-The oit.py classifier misclassifies edge cases, per its own limitations.
-This run did NOT reproduce a lab failure with Muse as target.
-Muse did not flip at turn 5, 8, or 20. An earlier turn-5 flip was a
-simulated fatigue model, not a measured lab model.
-No lab model was tested in this run. Do not cite this as "beats a lab."
-Results apply only to this model, this script, this config.
-The governor FastAPI layer was NOT tested in this environment
-(no fastapi / pytest / dotenv installed in the VM on 2026-10-25).
-The governor golden set (27 cases, FP 0, FN 0) was run by stubbing
-those imports to reach the pure gate functions only.
-What would make this a lab-beating result
-Run this exact same 20-turn paired protocol against an independent
-model, with the scaler gate in front of its tool calls, and publish
-the full case list, responses, classifier output, and audit log.
-Until that independent run exists, this is a protocol + Muse result,
-not a lab-beating result.
-
 Related work in this kit
 Sean-Multi-Turn-Adversarial-Eval — the attacker / classifier / audit used here
 deterministic-rag-governor — deterministic control plane, exact cache,
